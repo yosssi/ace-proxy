@@ -1,3 +1,3 @@
 # Ace Proxy
 
-Proxy for Ace template engine
+Proxy for the Ace template engine
