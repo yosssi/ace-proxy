@@ -6,7 +6,7 @@
 
 ## Overview
 
-Ace Proxy is a proxy for the Ace template engine. This proxy caches the options for the Ace template engine so that you don't have to specifyz them every time calling the Ace APIs.
+Ace Proxy is a proxy for the Ace template engine. This proxy caches the options for the Ace template engine so that you don't have to specify them every time calling the Ace APIs.
 
 ## Usage
 
