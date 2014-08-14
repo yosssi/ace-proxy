@@ -4,4 +4,42 @@
 [![GoDoc](https://godoc.org/github.com/yosssi/ace-proxy?status.svg)](https://godoc.org/github.com/yosssi/ace-proxy)
 [![Coverage Status](https://img.shields.io/coveralls/yosssi/ace-proxy.svg)](https://coveralls.io/r/yosssi/ace-proxy?branch=master)
 
-Proxy for the Ace template engine
+## Overview
+
+Ace Proxy is a proxy for the Ace template engine. This proxy caches the options for the Ace template engine so that you don't have to specifyz them every time calling the Ace APIs.
+
+## Usage
+
+```go
+package main
+
+import (
+	"net/http"
+
+	"github.com/yosssi/ace"
+	"github.com/yosssi/ace-proxy"
+)
+
+var p = proxy.New(&ace.Options{
+	BaseDir:       "views",
+	DynamicReload: true,
+})
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	tpl, err := p.Load("base", "", nil)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if err := tpl.Execute(w, map[string]string{"Msg": "Hello Ace"}); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func main() {
+	http.HandleFunc("/", handler)
+	http.ListenAndServe(":8080", nil)
+}
+```
