@@ -12,7 +12,7 @@ type Proxy struct {
 }
 
 // Load calls the `Load` function of the Ace template engine.
-func (p *Proxy) Load(basePath, innerPath string, opts *ace.Options) (*template.Template, error) {
+func (p *Proxy) Load(basePath, innerPath string, opts *ace.Options) (<-chan *template.Template, <-chan error) {
 	var o *ace.Options
 
 	if opts == nil {
@@ -21,7 +21,19 @@ func (p *Proxy) Load(basePath, innerPath string, opts *ace.Options) (*template.T
 		o = opts
 	}
 
-	return ace.Load(basePath, innerPath, o)
+	tplc := make(chan *template.Template)
+	errc := make(chan error)
+
+	go func() {
+		tpl, err := ace.Load(basePath, innerPath, o)
+		if err != nil {
+			errc <- err
+			return
+		}
+		tplc <- tpl
+	}()
+
+	return tplc, errc
 }
 
 // New creates and returns a proxy.

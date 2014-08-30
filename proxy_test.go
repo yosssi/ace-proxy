@@ -19,7 +19,10 @@ func TestProxy_Load_opts_not_specified(t *testing.T) {
 		BaseDir: "test",
 	})
 
-	if _, err := p.Load("base", "inner", nil); err != nil {
+	tplc, errc := p.Load("base", "inner", nil)
+	select {
+	case <-tplc:
+	case err := <-errc:
 		t.Errorf("an error occurred [err: %+v]", err)
 	}
 }
@@ -31,7 +34,14 @@ func TestProxy_Load_opts_specified(t *testing.T) {
 
 	expectedErrMsg := "open base.ace: no such file or directory"
 
-	if _, err := p.Load("base", "inner", &ace.Options{DynamicReload: true}); err == nil || err.Error() != expectedErrMsg {
-		t.Errorf("the error (%s) should be occurred [actual: %+v]", expectedErrMsg, err)
+	tplc, errc := p.Load("base", "inner", &ace.Options{DynamicReload: true})
+
+	select {
+	case <-tplc:
+		t.Error("an error should be occurred")
+	case err := <-errc:
+		if err.Error() != expectedErrMsg {
+			t.Errorf("the error (%s) should be occurred [actual: %+v]", expectedErrMsg, err)
+		}
 	}
 }
