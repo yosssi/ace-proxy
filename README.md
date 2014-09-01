@@ -14,6 +14,7 @@ Ace Proxy is a proxy for the Ace template engine. This proxy caches the options 
 package main
 
 import (
+	"html/template"
 	"net/http"
 
 	"github.com/yosssi/ace"
@@ -26,8 +27,13 @@ var p = proxy.New(&ace.Options{
 })
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	tpl, err := p.Load("base", "", nil)
-	if err != nil {
+	tplc, errc := p.Load("base", "", nil)
+
+	var tpl *template.Template
+
+	select {
+	case tpl = <-tplc:
+	case err := <-errc:
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
