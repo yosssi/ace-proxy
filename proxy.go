@@ -8,7 +8,7 @@ import (
 
 // Proxy represents a proxy for the Ace template engine.
 type Proxy struct {
-	opts *ace.Options
+	Opts *ace.Options
 }
 
 // Load calls the `Load` function of the Ace template engine.
@@ -16,7 +16,7 @@ func (p *Proxy) Load(basePath, innerPath string, opts *ace.Options) (<-chan *tem
 	var o *ace.Options
 
 	if opts == nil {
-		o = p.opts
+		o = p.Opts
 	} else {
 		o = opts
 	}
@@ -39,6 +39,6 @@ func (p *Proxy) Load(basePath, innerPath string, opts *ace.Options) (<-chan *tem
 // New creates and returns a proxy.
 func New(opts *ace.Options) *Proxy {
 	return &Proxy{
-		opts: opts,
+		Opts: opts,
 	}
 }

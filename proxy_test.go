@@ -9,8 +9,8 @@ import (
 func TestNew(t *testing.T) {
 	p := New(nil)
 
-	if p.opts != nil {
-		t.Errorf("the options should be nil. [actual: %+v]", p.opts)
+	if p.Opts != nil {
+		t.Errorf("the options should be nil. [actual: %+v]", p.Opts)
 	}
 }
 
