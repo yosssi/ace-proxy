@@ -27,13 +27,9 @@ var p = proxy.New(&ace.Options{
 })
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	tplc, errc := p.Load("base", "", nil)
+	tpl, err := p.Load("base", "", nil)
 
-	var tpl *template.Template
-
-	select {
-	case tpl = <-tplc:
-	case err := <-errc:
+	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
