@@ -14,7 +14,6 @@ Ace Proxy is a proxy for the Ace template engine. This proxy caches the options 
 package main
 
 import (
-	"html/template"
 	"net/http"
 
 	"github.com/yosssi/ace"
